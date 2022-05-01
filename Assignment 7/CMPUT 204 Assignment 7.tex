@@ -1,0 +1,302 @@
+\documentclass[11pt, letterpaper, titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{color,graphicx,overpic} 
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{float}
+\usepackage{blindtext}
+\usepackage{longtable}
+\usepackage{scrextend}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{calc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[normalem]{ulem}
+\usepackage{tabularx}
+\usepackage{mathrsfs}
+\usepackage{bookmark}
+\usepackage{apple_emoji}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{ltablex}
+\usepackage{xurl}
+\usepackage{siunitx}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage{paracol}
+
+\setlist{topsep=0pt}
+\mathtoolsset{showonlyrefs}  
+\allowdisplaybreaks
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\bracks{\left(}{\right)}
+
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
+\usemintedstyle{tango}
+\setminted{linenos}
+\setmintedinline{bgcolor=bg,style=bw}
+
+\tikzset{minimum size=1cm}
+
+\geometry{top=2.54cm, left=2.54cm, right=2.54cm, bottom=2.54cm}
+\setlength{\headheight}{20pt}
+\setlength{\parskip}{0.5cm}
+\setlength{\parindent}{0cm}
+
+\newcommand{\B}{\includegraphics[height=1.5em, valign=B, raise=-0.2em]{BigB.png}} 
+\newcommand{\textbr}[1]{\textbf{\color{red}{#1}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\B enjamin Kong | 1573684}
+\lhead{\textit{CMPUT 204 Assignment 7 🚗 🚕 🚙}}
+\rfoot{Page \thepage\ of\ \pageref{LastPage}}
+
+\begin{document}
+\onehalfspacing
+
+\subsection*{Problem 1.}
+\begin{enumerate}[label=\alph*.]
+    \item The filled table is provided below.
+    
+    \footnotesize
+    \begin{tabularx}{\textwidth}{cccccccccccc}
+        i$\backslash$D &  0 &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 & 10 \\ \hline
+                     0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 &  0 \\ \hline
+                     1 &  0 &  0 &  4 &  4 &  4 &  4 &  4 &  4 &  4 &  4 &  4 \\ \hline
+                     2 &  0 &  0 &  4 &  4 &  7 &  7 &  7 &  7 &  7 &  7 &  7 \\ \hline
+                     3 &  0 &  0 &  4 &  6 &  7 & 10 & 10 & 13 & 13 & 13 & 13 \\ \hline
+                     4 &  0 &  0 &  4 &  6 &  7 & 10 & 10 & 13 & 13 & 15 & 15 \\ \hline
+                     5 &  0 &  0 &  4 &  6 &  7 & 10 & 10 & 13 & 13 & 15 & 17 \\ \hline
+    \end{tabularx}
+    \normalsize
+    Applying the \mintinline{text}{PrintOptKnapsack} procedure described in the lecture notes, we find items 1, 3, and 5 are in the optimal solution. Their weights are 2, 3, and 5 and their values are 4, 6, and 7. Hence the total weight is 10 and the total value is 17.
+    
+    \item We find that ACD is the LCS. The filled table is provided below. The numbers that are bolded represent the cells that the \mintinline{text}{PrintLCS} procedure goes through. The numbers that are red represent cells where we print $X_i$.
+    
+    \footnotesize
+    \begin{tabularx}{\textwidth}{|c|c|c|c|c|c|c|c|}
+        \hline
+          &     j &          0 &          1 &          2 &          3 &          4 &          5 \\ \hline
+        i &       &      $Y_j$ &          A &          C &          D &          E &          F \\ \hline
+        0 & $X_i$ &          0 &          0 & \textbf{0} &          0 &          0 &          0 \\ \hline
+        1 &     A &          0 &          1 &          1 & \textbr{1} &          1 &          1 \\ \hline
+        2 &     B &          0 &          1 &          1 & \textbf{1} &          1 &          1 \\ \hline
+        3 &     A &          0 &          1 &          1 & \textbf{1} &          1 &          1 \\ \hline
+        4 &     E &          0 &          1 &          1 & \textbf{1} &          2 &          2 \\ \hline
+        5 &     C &          0 &          1 &          2 &          2 & \textbr{2} &          2 \\ \hline
+        6 &     C &          0 &          1 &          2 &          2 & \textbf{2} &          2 \\ \hline
+        7 &     D &          0 &          1 &          2 &          3 &          3 & \textbr{3} \\ \hline
+    \end{tabularx}
+    \normalsize
+
+    \item We have $(d_0, d_1, d_2, d_3, d_4, d_5) = (1, 5, 2, 6, 1, 4)$. The minimum number of multiplications is 28. This is achieved via $((A \times B) \times (C \times D)) \times E$. The filled $M$-matrix and $S$-matrix are shown below.
+    \begin{paracol}{2}
+        {
+            \renewcommand{\arraystretch}{1.5}
+            \begin{table}[H]
+                \footnotesize
+                \centering
+                \caption*{$M$-matrix}
+                \begin{tabular}{P{1em}P{1em}|P{1em}P{1em}P{1em}P{1em}P{1em}}
+                        &&&& $i$ && \\
+                        &   & 1  & 2  & 3  & 4  & 5 \\ \hline
+                        & 5 & 28 & 42 & 20 & 42 & 0 \\
+                        & 4 & 24 & 22 & 12 & 0  &   \\
+                    $j$ & 3 & 22 & 60 &  0 &    &   \\
+                        & 2 & 10 &  0 &    &    &   \\
+                        & 1 &  0 &    &    &    &   \\
+                \end{tabular}
+            \end{table}
+        }
+
+        \switchcolumn
+
+        {
+            \renewcommand{\arraystretch}{1.5}
+            \begin{table}[H]
+                \footnotesize
+                \centering
+                \caption*{$S$-matrix}
+                \begin{tabular}{P{1em}P{1em}|P{1em}P{1em}P{1em}P{1em}P{1em}}
+                        &&&& $i$ && \\
+                        &   & 1       & 2       & 3       & 4       & 5       \\ \hline
+                        & 5 & 4       & 4       & 4       & 4       & $\perp$ \\
+                        & 4 & 2       & 2       & 3       & $\perp$ &         \\
+                    $j$ & 3 & 2       & 2       & $\perp$ &         &         \\
+                        & 2 & 1       & $\perp$ &         &         &         \\
+                        & 1 & $\perp$ &         &         &         &         \\
+                \end{tabular}
+            \end{table}
+        }
+\end{paracol}
+\end{enumerate}
+
+\newpage
+
+\subsection*{Problem 2.}
+\begin{itemize}
+    \item We consider the algorithm presented in problem 2 of problem set \#5. After running the algorithm, we have $A = \{0, 7, 8, 13, 17, 24\}$ and $S = \{\text{N/A}, 1, 1, 3, 3, 5\}$.
+    
+    \begin{itemize}
+        \item We show how we fill the cell at $A[5]$. At this point, we will have $A = \{0, 7, 8, 13\}$ and $S = \{\text{N/A}, 1, 1, 3\}$. Let $i = 5$. We first set $A[i] = \infty$. We then iterate from $j = 1$ to $i - 1 = 4$. We attempt to find the lowest value out of $A[j] + C[j][5]$. We have
+        \begin{itemize}
+            \item $j = 1 \longrightarrow A[1] + C[1][5] = 0 + 21 = 21$,
+            \item $j = 2 \longrightarrow A[2] + C[2][5] = 7 + 13 = 20$,
+            \item $j = 3 \longrightarrow A[3] + C[3][5] = 8 + 9 = 17$,
+            \item $j = 4 \longrightarrow A[4] + C[4][5] = 13 + 8 = 21$.
+        \end{itemize}
+        We see we get the lowest value when $j = 3$. As a result, we set $A[i] = 17$ and $S[i] = 3$ and have $A = \{0, 7, 8, 13, 17\}$ and $S = \{\text{N/A}, 1, 1, 3, 3\}$ after this step.
+
+        \item We now show how we fill the cell at $A[6]$. Let $i = 6$. We first set $A[i] = \infty$. We then iterate from $j = 1$ to $i - 1 = 5$. We attempt to find the lowest value out of $A[j] + C[j][6]$. We have
+        \begin{itemize}
+            \item $j = 1 \longrightarrow A[1] + C[1][6] = 0 + \infty = \infty$,
+            \item $j = 2 \longrightarrow A[2] + C[2][6] = 7 + \infty = \infty$,
+            \item $j = 3 \longrightarrow A[3] + C[3][6] = 8 + 17 = 25$,
+            \item $j = 4 \longrightarrow A[4] + C[4][6] = 13 + 15 = 28$,
+            \item $j = 5 \longrightarrow A[5] + C[5][6] = 17 + 7 = 24$.
+        \end{itemize}
+        We see we get the lowest value when $j = 5$. As a result, we set $A[i] = 24$ and $S[i] = 5$ and have $A = \{0, 7, 8, 13, 17, 24\}$ and $S = \{\text{N/A}, 1, 1, 3, 3, 5\}$ after this step.
+    \end{itemize}
+
+    \item $S = \{\text{N/A}, 1, 1, 3, 3, 5\}$, so renting from 1 to 3, 3 to 5, and 5 to 6 yields the minimum cost.
+\end{itemize}
+
+\newpage
+
+\subsection*{Problem 3.}
+\begin{enumerate}[label=\alph*.]
+    \item The general idea of our algorithm is to apply the \mintinline{text}{LCS} algorithm discussed in class. However, instead of using two different strings, we will simply call the \mintinline{text}{LCS} algorithm with some string $X$ and the reverse of $X$. Let us define $Y = \langle x_n \ldots x_1 \rangle = \langle y_1 \ldots y_m \rangle$ as the reverse of $X$. We get the recursion 
+    \begin{equation}
+        \text{LSP}(\langle x_1 \ldots x_n \rangle,\ \langle y_1 \ldots y_m \rangle) = \text{max}
+        \begin{rcases}
+        \begin{dcases}
+            \text{LSP}(\langle x_1 \ldots x_{n - 1} \rangle,\ \langle y_1 \ldots y_m \rangle), \\
+            \text{LSP}(\langle x_1 \ldots x_n \rangle,\ \langle y_1 \ldots y_{m - 1} \rangle), \\
+            \text{(if $x_n = y_m$) } 1 + \text{LSP}(\langle x_1 \ldots x_{n - 1} \rangle,\ \langle y_1 \ldots y_{m - 1} \rangle).
+        \end{dcases}
+        \end{rcases}
+    \end{equation}
+    All recursive calls live in a small domain: the first $i$ characters of $X$ and the first $j$ characters of $Y$.
+    
+    \item We define $D[i][j]$ to hold the result of the $(i,j)$-recursion call. For each $0 \leq i \leq n$ and $0 \leq j \leq n$ (where $n$ is the length of the input string $X$), $D[i][j]$ is the length of the longest common subsequence of $\langle x_1 \ldots x_n \rangle$ and $\langle x_n \ldots x_1 \rangle$. We have 
+    \begin{equation}
+        D[i][j] = \text{max}
+        \begin{rcases}
+        \begin{dcases}
+            D[i - 1][j], \\
+            D[i][j - 1], \\
+            \text{(if $x_i = y_j$) } 1 + D[i - 1][j - 1].
+        \end{dcases}
+        \end{rcases} 
+    \end{equation}
+    The dimension of the table will be $n \times n$. The cell at $D[n][n]$ will store the value of an optimal solution.
+
+    \item The pseudocode for \mintinline{text}{LongestSubPalindrome} is provided below. It prints and returns the length of the longest sub-palindrome. Note that it uses the \mintinline{text}{LCS} algorithm discussed in the lecture slides as a helper function. The code is written in Lua. Note that the \mintinline{text}{local} keyword is used to create a new variable. \mintinline{text}{{}} is used to create a new array. Other Lua-specific functions are explained in comments throughout the code.
+    
+    {
+    \footnotesize
+    \begin{minted}{lua}
+function LCS(X, Y)
+    local n = X:len() -- Get the length of X
+    local m = Y:len() -- Get the length of Y
+
+    local D = {}
+
+    for i = 0, n do
+        D[i] = {}
+
+        for j = 0, m do
+            D[i][j] = 0
+        end
+    end
+
+    for i = 1, n do
+        for j = 1, m do
+            D[i][j] = D[i - 1][j]
+
+            if D[i][j - 1] > D[i][j] then
+                D[i][j] = D[i][j - 1]
+            end
+
+            -- sub(i, i) gets the ith character of X
+            -- sub(j, j) gets the jth character of Y
+            if X:sub(i, i) == Y:sub(j, j) and D[i - 1][j - 1] + 1 > D[i][j] then
+                D[i][j] = D[i - 1][j - 1] + 1
+            end
+        end
+    end
+
+    return D
+end
+
+function LongestSubPalindrome(X)
+    local n = X:len() -- Get the length of X
+    local m = n
+    local D = LCS(X, X:reverse()) -- reverse() reverses X
+    print(D[n][m])
+    return D
+end
+    \end{minted}
+    }
+
+    As discussed in the lecture notes, \mintinline{text}{LCS} runs in $O(n + m + nm)$ time where $n$ is the length of the first string and $m$ is the length of the second string. Our algorithm \mintinline{text}{LongestSubPalindrome} calls \mintinline{text}{LCS} with some string $X$ and the reverse of $X$. If $X$ has length $n$, then the reverse of $X$ also has length $n$. This means we are calling \mintinline{text}{LCS} with two strings of length $n$ meaning we can conclude the running time is in $O(2n + n^2) \in O(n^2)$.
+
+    \item The pseudocode for \mintinline{text}{PrintLongestSubPalindrome} is provided below.
+    
+    {
+    \footnotesize
+    \begin{minted}{lua}
+function PrintLongestSubPalindrome(D, i, j, X)
+    if i > 0 and j > 0 then
+        if D[i][j] == D[i - 1][j - 1] + 1 then
+            PrintLongestSubPalindrome(D, i - 1, j - 1, X)
+            print(X:sub(i, i))
+        elseif D[i][j] == D[i - 1][j] then
+            PrintLongestSubPalindrome(D, i - 1, j, X)
+        else
+            PrintLongestSubPalindrome(D, i, j - 1, X)
+        end
+    end
+end
+    \end{minted}
+    }
+
+    Notice that the algorithm is almost exactly the same as the algorithm derived for \mintinline{text}{PrintLCS} in the lecture notes. The algorithm travels at most $n$ cells up and $n$ cells left in $D$. As a result, we can conclude the running time is in $O(n)$.
+
+    \item \begin{enumerate}[label=(\roman*)]
+        \item The filled table is shown below.
+        \footnotesize
+        \begin{tabularx}{\textwidth}{|c|c|c|c|c|c|c|c|c|}
+            \hline
+              &     j &     0 & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+            i &       & $Y_j$ & e & d & q & q & e & q \\ \hline
+            0 & $X_i$ &     0 & 0 & \textbf{0} & 0 & 0 & 0 & 0 \\ \hline
+            1 &     p &     0 & 0 & \textbf{0} & 0 & 0 & 0 & 1 \\ \hline
+            2 &     e &     0 & 1 & 1 & \textbr{1} & 1 & 1 & 1 \\ \hline
+            3 &     q &     0 & 1 & 1 & 2 & \textbr{2} & 2 & 2 \\ \hline
+            4 &     q &     0 & 1 & 1 & 2 & 3 & \textbr{3} & 3 \\ \hline
+            5 &     d &     0 & 1 & 2 & 2 & 3 & \textbf{3} & 3 \\ \hline
+            6 &     e &     0 & 1 & 2 & 2 & 3 & 4 & \textbr{4} \\ \hline
+        \end{tabularx}
+        \normalsize
+
+        \item The sub-palindrome generated is \mintinline{text}{eqqe}. We first used the \mintinline{text}{LongestSubPalindrome} algorithm to generate $D$, then used the \mintinline{text}{PrintLongestSubPalindrome} algorithm with $D$, $i = 6$, $j = 6$, and $X = $ \mintinline{text}{"peqqde"} to output the letters of the palindrome.
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}

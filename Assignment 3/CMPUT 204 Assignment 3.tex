@@ -1,0 +1,359 @@
+\documentclass[11pt, letterpaper, titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{color,graphicx,overpic} 
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{float}
+\usepackage{blindtext}
+\usepackage{longtable}
+\usepackage{scrextend}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{calc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[normalem]{ulem}
+\usepackage{tabularx}
+\usepackage{mathrsfs}
+\usepackage{bookmark}
+\usepackage{apple_emoji}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{ltablex}
+\usepackage{xurl}
+\usepackage{siunitx}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage{paracol}
+
+\mathtoolsset{showonlyrefs}  
+\allowdisplaybreaks
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\bracks{\left(}{\right)}
+
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
+\usemintedstyle{vs}
+\setminted{linenos}
+\setmintedinline{bgcolor=bg,style=bw}
+
+\geometry{top=2.54cm, left=2.54cm, right=2.54cm, bottom=2.54cm}
+\setlength{\headheight}{20pt}
+\setlength{\parskip}{0.3cm}
+\setlength{\parindent}{0cm}
+
+\newcommand{\B}{\includegraphics[height=1.5em, valign=B, raise=-0.2em]{BigB.png}} 
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\B enjamin Kong | 1573684}
+\lhead{\textit{CMPUT 204 Assignment 3}}
+\rfoot{Page \thepage\ of\ \pageref{LastPage}}
+
+\begin{document}
+\onehalfspacing
+
+\subsection*{Problem 1.}
+\begin{enumerate}[label=\alph*)]
+    \item Let 
+    \begin{equation}
+        f(n) = \begin{cases} 
+            0, & n = 0 \\
+            n + f(n - 10), & n \geq 1.
+        \end{cases}
+    \end{equation}
+    For simplicity, we assume $n$ is a multiple of 10. Let $n = 10k$, $k \in \mathbb{N}$. In the general case, we then have
+    \begin{align}
+        f(10k) &= 10k + f(10k - 10) \\
+        &= 10k + (10k - 10) + f(10k - 20) \\
+        &= \ldots \\
+        &= 10k + (10k - 10) + (10k - 20) + \ldots + 20 + 10 + f(0) \\
+        &= 10k + (10k - 10) + (10k - 20) + \ldots + 20 + 10 \\
+        &= 10k + (10k - 10) + 10 + (10k - 20) + 20 + \ldots \\
+        &= 10k + 10k + 10k + \ldots \\
+        &= 10( k + k + k + \ldots ) \\
+        &= 10 \sum_{i = 1}^{k} i \\
+        &= 10 \left( \frac{k(k + 1)}{2} \right) \\
+        &= 5k(k + 1).
+    \end{align}
+    Since $n = 10k$, we have $k = n/10$. It follows that 
+    \begin{align}
+        f(n) &= \dfrac{n\left( \frac{n}{10} + 1 \right)}{2}.
+    \end{align}
+    Therefore we guess that $T(n) \in O(n^2)$. We now prove our guess by induction. Let $P(n)$ be the statement: 
+    \begin{align}
+        f(n) &= \dfrac{n\left( \frac{n}{10} + 1 \right)}{2}, n \in \mathbb{N}.
+    \end{align}
+
+    \textbf{Theorem:} For all $n \in \mathbb{N}$, $P(n)$ is true. Proof by mathematical induction.
+
+    \textbf{Basis step:} For $n = 0$, $f(0) = 0$ by the recurrence relation and $f(0) = 0$ by the guessed closed form. $P(0)$ holds.
+
+    \textbf{Inductive step:} Assume $n = 10k$, $k \in \mathbb{N}$. Assume $P(10k)$ holds. In other words,
+    \begin{align}
+        f(10k) &= \dfrac{10k\left( \frac{10k}{10} + 1 \right)}{2} \\
+        &= 5k(k + 1).
+    \end{align}
+    We want to show $P(10(k + 1))$ holds. In other words, using the recurrence relation, we want to show
+    \begin{align}
+        f(10(k + 1)) &= \dfrac{10(k + 1)\left( \frac{10(k + 1)}{10} + 1 \right)}{2} \\
+        &= 5(k + 1)( (k + 1) + 1 ) \\
+        &= 5(k + 1)(k + 2).
+    \end{align}
+    By the recurrence relation,
+    \begin{align}
+        f(10(k + 1)) &= 10(k + 1) + f(10(k + 1) - 10) \\
+        &= 10(k + 1) + f(10k) \\
+        &= 10(k + 1) + 5k(k + 1) \\
+        &= 10k + 10 + 5k^2 + 5k \\
+        &= 5k^2 + 15k + 10 \\
+        &= 5(k^2 + 3k + 2) \\
+        &= 5(k + 1)(k + 2).
+    \end{align}
+    We have shown $P(10(k + 1))$ holds. Now the conclusion follows from the basis step, the inductive step, and the principle of induction. As a result, we can also guess that $T(n - 100) + 100n \in O(n^2)$.
+
+    \item Let $n \in \mathbb{N}$ such that $n \geq n_1$ for some $n_1$ implies that $\floor*{n/2} + 8 \leq 3n/4$. We wish to show that $T(n) \in O(n\log(n))$. We can show this by showing $T(n) \leq cn\log(n) - d$ for some $c$ and $d$. Substituting this into the recurrence $T(n) = 2T(\floor*{n/2} + 8) + n$ yields
+    \begin{align}
+        T(n) &\leq 2( c(n/2 + 8) \log(n/2 + 8) - d ) + n \\
+        &= 2c(n/2 + 8) \log(n/2 + 8) - 2d + n \\
+        &= (cn + 16c) \log(n/2 + 8) - 2d + n \\
+        &= cn\log(n/2 + 8) + 16c\log(n/2 + 8) - 2d + n \\
+        &\leq cn\log(3n/4) + 16c\log(3n/4) - 2d + n \\
+        &= cn(\log(n) + \log(3/4)) - d + 16c(\log(n) + \log(3/4)) - d + n \\
+        &= cn\log(n) - d + cn\log(3/4) + 16c\log(n) + 16c\log(3/4) - d + n. 
+    \end{align}
+    We now need to choose $c > 0$ such that for $n$ sufficiently large, the above expression is $\leq cn\log(n) - d$. Let us choose $c = -2 / \log(3/4)$ and $d = 32$. The above expression becomes
+    \begin{align}
+        T(n) &\leq cn\log(n) - d - 2n + 16c\log(n) -32 - 32 + n \\
+        &= cn\log(n) - d + 16c\log(n) - n - 64 \\
+        &\leq cn\log(n) - d + 16c\log(n) - n.
+    \end{align}
+    Since $\log(n) \in o(n)$, then $n \geq n_2$ for some $n_2$ implies that $n \geq 16c\log(n)$. It follows that 
+    \begin{align}
+        T(n) &\leq cn\log(n) - d
+    \end{align}
+    for sufficiently large $n$. In fact, by letting $n_0 = \max\{n_1, n_2\}$, $n \geq n_0$ implies that $T(n) \leq cn\log(n) - d$. Hence we conclude $T(n) \in O(n\log(n))$.
+
+    \item The recurrence tree of $T(n) = T(n/3) + T(2n/3) + 3n$ is shown below:
+    
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[level/.style={sibling distance=60mm/#1}]
+        \node (z) {$3n$}
+            child {node (a) {$3\left(\frac{n}{3}\right)$}
+                child {node (b) {$3\left(\frac{n}{9}\right)$}
+                    child {node {$\vdots$}} 
+                    child {node {$\vdots$}}
+                }
+                child {node (g) {$3\left(\frac{2n}{9}\right)$}
+                    child {node {$\vdots$}}
+                    child {node {$\vdots$}}
+                }
+            }
+            child {node (j) {$3\left(\frac{2n}{3}\right)$}
+                child {node (k) {$3\left(\frac{2n}{9}\right)$}
+                    child {node {$\vdots$}}
+                    child {node {$\vdots$}}
+                }
+                child {node (l) {$3\left(\frac{4n}{9}\right)$}
+                    child {node {$\vdots$}}
+                    child {node (c){$\vdots$}
+                        child [grow=right] {node (r) {$\vdots$} edge from parent[draw=none]
+                            child [grow=up] {node (s) {$3n$} edge from parent[draw=none]
+                                child [grow=up] {node (t) {$3n$} edge from parent[draw=none]
+                                    child [grow=up] {node (u) {$3n$} edge from parent[draw=none]}
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+    \end{tikzpicture}
+    \end{figure}
+
+    The longest path from the root to a leaf is $n \rightarrow (2/3)n \rightarrow (2/3)^2n \rightarrow \ldots \rightarrow 1$. Since $(2/3)^kn = 1$ when $k = \log_{3/2}(n)$, we conclude the height of the recurrence tree will be $\log_{3/2}(n)$. Hence, since each level in the tree sums to $3n$, we conclude $T(n) = 3n\log_{3/2}(n)$. We guess that the tight upper bound and tight lower bound is $O(n\log(n))$; in other words, $T(n) \in O(n\log(n))$ and $T(n) \in \Omega(n\log(n))$.
+    
+    We can show $T(n) \in O(n\log(n))$. First, we note that $T(n)$ can be simplified to
+    \begin{align}
+        T(n) &= 3n\log_{3/2}(n) \\
+        &= 3n\dfrac{\log(n)}{\log(3/2)} \\
+        &= \dfrac{3}{\log(3/2)}n\log(n).
+    \end{align}
+    By definition, $h(n) \in O(f(n))$ if there exists $c > 0$, $n_0 \in \mathbb{N}$ such that for all $n \geq n_0$ we have $h(n) \leq cf(n)$. For $T(n)$, we see that if we choose $c = 3/\log(3/2)$, then $T(n) \leq cn\log(n)$ for all $n_0$. Hence we conclude $T(n) \in O(n\log(n))$.
+
+    \item For simplicity, we assume $n = 2^{m}$ ($m = \log(n)$). Then the recurrence becomes 
+    \begin{equation}
+        T(2^{m}) = 2T(2^{m/2}) + \log(m).
+    \end{equation}
+    Now assume $S(m) = T(2^m)$. Then the recurrence becomes 
+    \begin{equation}
+        S(m) = 2S(m/2) + \log(m).
+    \end{equation}
+    We see that the recurrence is now in the form $T(n) = aT(n/b) + f(n)$. As a result, we can apply the master method. Let's consider the first case of the master theorem. We have $a = 2$, $b = 2$, and $f(m) = \log(m)$. We have that 
+    \begin{align}
+        f(m) = \log(m) \in O(m^{\log_b(a)-\epsilon}) = O(m^{\log_2(2)-\epsilon}) = O(m^{1-\epsilon})
+    \end{align}
+    for any $0 < \epsilon < 1$ meaning $S(m) \in \Theta(m)$. Changing our variable back to $n$, we have
+    \begin{equation}
+        S(m) = T(2^m) = T(n) \in \Theta(m) = \Theta(\log(n)).
+    \end{equation}
+    Conclusion: $T(n) \in \Theta(\log(n))$.
+
+    \item Assume $n$ is even for simplicity. Assume $T(0) = 1$. The recurrence tree of $T(n) = 2T(n - 2) + 1$ is shown below:
+    
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[level/.style={sibling distance=60mm/#1}]
+        \node (z) {$1$}
+            child {node (a) {$1$}
+                child {node (b) {$1$}
+                    child {node {$\vdots$}} 
+                    child {node {$\vdots$}}
+                }
+                child {node (g) {$1$}
+                    child {node {$\vdots$}}
+                    child {node {$\vdots$}}
+                }
+            }
+            child {node (j) {$1$}
+                child {node (k) {$1$}
+                    child {node {$\vdots$}}
+                    child {node {$\vdots$}}
+                }
+                child {node (l) {$1$}
+                    child {node {$\vdots$}}
+                    child {node (c){$\vdots$}
+                        child [grow=right] {node (r) {$\vdots$} edge from parent[draw=none]
+                            child [grow=up] {node (s) {$2^2$} edge from parent[draw=none]
+                                child [grow=up] {node (t) {$2^1$} edge from parent[draw=none]
+                                    child [grow=up] {node (u) {$2^0$} edge from parent[draw=none]}
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+    \end{tikzpicture}
+    \end{figure}
+
+    The tree has $n / 2$ levels and the cost of each level sums to $2^k$ where $k$ is the level. The cost of the tree is therefore 
+    \begin{align}
+        T(n) &= \sum_{i = 0}^{n / 2} 2^i \\
+        &= 2^{n / 2 + 1} - 1 \\
+        &= 2 \cdot 2^{n / 2} - 1 \\
+        &= 2 \sqrt{2^n} - 1.
+    \end{align}
+    We can confirm this using induction.
+
+    \textbf{Theorem:} For all $n \in \mathbb{N}$, $T(n) = 2 \sqrt{2^n} - 1$.
+
+    \textbf{Basis step:} For $n = 0$, $T(0) = 1$ by definition and $2\sqrt{2^0} - 1 = 1$. Hence $T(n) = 2 \sqrt{2^n} - 1$ holds for $n = 0$.
+
+    \textbf{Inductive step:} Assume $T(k) = 2\sqrt{2^k} - 1$. We need to prove $T(k + 2) = 2\sqrt{2^{k + 2}} - 1$. From the recurrence, we have 
+    \begin{align}
+        T(k + 2) &= 2T(k) + 1 \\
+        &= 2(2\sqrt{2^k} - 1) + 1 \\
+        &= 2\sqrt{2^2}\sqrt{2^k} - 2 + 1 \\
+        &= 2\sqrt{2^2 \cdot 2^k} - 1 \\
+        &= 2\sqrt{2^{k + 2}} - 1.
+    \end{align}
+    We have shown $T(k+2) = 2\sqrt{2^{k + 2}} - 1$. Now the conclusion follows from the basis step, the inductive step, and the principle of induction. Hence, we conclude $T(n) \in \Theta(\sqrt{2^n})$. To verify this, we will verify $T(n) \in O(\sqrt{2^n})$ and $T(n) \in \Omega(\sqrt{2^n})$.
+    \begin{itemize}
+        \item $T(n) \in O(\sqrt{2^n})$: we need to show $T(n) \leq c\sqrt{2^n}$ for $n \geq n_0$ where $c, n_0 \in \mathbb{N}$. Let us choose $c = 2$. Then we have 
+        \begin{align}
+            T(n) &= 2 \sqrt{2^n} - 1
+            \leq c \sqrt{2^n}
+            = 2\sqrt{2^n}.
+        \end{align}
+        This is true for all $n_0$, hence we have shown $T(n) \in O(\sqrt{2^n})$.
+
+        \item $T(n) \in \Omega(\sqrt{2^n})$: we need to show $T(n) \geq c\sqrt{2^n}$ for $n \geq n_0$ where $c, n_0 \in \mathbb{N}$. If we select $n_0 \geq 2$, then we have $\sqrt{2^n} \geq 2$ for all $n \geq n_0$. If we also select $c = 1$, then it then follows that the difference between $2\sqrt{2^n}$ and $c\sqrt{2^n} = \sqrt{2^n}$ is at least 2 for all $n \geq n_0$. Then it follows that 
+        \begin{align}
+            T(n) &= 2\sqrt{2^n} - 1 \geq c\sqrt{2^n} = \sqrt{2^n}
+        \end{align}
+        since the difference between $2\sqrt{2^n} - 1$ and $\sqrt{2^n}$ is always at least 1. Hence, $T(n) \in \Omega(\sqrt{2^n})$.
+    \end{itemize}
+    We conclude $T(n) \in \Theta(\sqrt{2^n})$.
+\end{enumerate}
+
+\newpage
+
+\subsection*{Problem 2.}
+\begin{enumerate}[label=\alph*)]
+    \item We have $a = 8$, $b = 4$, and $f(n) = n^2$. We have that $\log_b(a) = \log_4(8) = 3/2$, so $n^{\log_b(a)} = n^{3/2}$. We see that $f(n) \in \Omega(n^{3/2 + \epsilon})$ for $\epsilon = 1/2$, so case 3 applies. We can also confirm $af(n/b) \leq \delta f(n)$ for some constant $\delta < 1$ for all sufficiently large $n$. We have that 
+    \begin{align}
+        af(n/b) &= 8\left( \dfrac{n}{4} \right) ^ 2 \\
+        &= \dfrac{8}{16}n^2 \\
+        &= \dfrac{n^2}{2} \\
+        &\leq \delta f(n)
+    \end{align}
+    which holds for $\delta = 1/2$. As a result, we conclude $T(n) \in \Theta(n^2)$.
+
+    \item We have $a = 5$, $b = 9$, and $f(n) = \sqrt{n}$. We have that $\log_b(a) = \log_9(5) \approx 0.732$, so $n^{\log_b(a)} = n^{\log_9(5)} \approx n^{0.732}$. We see that $f(n) \in O(n^{\log_9(5) - \epsilon})$ for $\epsilon = 0.1$, so case 1 applies. We therefore conclude $T(n) \in \Theta(n^{\log_9(5)})$.
+    
+    \item We have $a = 2$, $b = 4$, and $f(n) = 1$. We have that $\log_b(a) = \log_4(2) = 1/2$, so $n^{\log_b(a)} = n^{1/2}$. We see that $f(n) \in O(n^{1/2 - \epsilon})$ for $\epsilon = 0.1$, so case 1 applies. We therefore conclude $T(n) \in \Theta(\sqrt{n})$.
+    
+    \item We have $a = 9$, $b = 8$, and $f(n) = n^2 + n$. We have that $\log_b(a) = \log_8{9} \approx 1.057$, so $n^{\log_b(a)} = n^{\log_8(9)} \approx n^{1.057}$. We see that $f(n) \in \Omega(n^{\log_8(9) + \epsilon})$ for $\epsilon = 0.9$, so case 3 applies. We can also confirm $af(n/b) \leq \delta f(n)$ for some constant $\delta < 1$ for all sufficiently large $n$. We have that 
+    \begin{align}
+        af(n/b) &= 9\left(\dfrac{n}{8}\right)^2 + 9\left(\dfrac{n}{8}\right) \\
+        &= \dfrac{9}{64}n^2 + \dfrac{9}{8}n.
+    \end{align}
+    Let us select $\delta = 1/2$. Subtracting $af(n/b)$ from $\delta f(n) = f(n) / 2$ yields 
+    \begin{align}
+        \dfrac{n^2}{2} + \dfrac{n}{2} - \left(\dfrac{9}{64}n^2 + \dfrac{9}{8}n\right) &= \dfrac{23}{64}n^2 - \dfrac{5}{8}n \\
+        &= \dfrac{23}{64}n\left(n - \dfrac{64}{23} \cdot \dfrac{5}{8}\right) \\
+        &= \dfrac{23}{64}n\left(n - \dfrac{40}{23}\right)
+    \end{align}
+    Since the above result is at least zero for all $n \geq 40/23$, we conclude that $af(n/b) \leq \delta f(n)$ for $\delta = 1/2$ when $n \geq 40/23$. As a result, we conclude $T(n) \in \Theta(n^2)$.
+\end{enumerate}
+
+\newpage
+
+\subsection*{Problem 3.}
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Claim:} For any array $A$ and some natural number $n$ such that $A$ has at least $n = e - b + 1$ cells, subarray $A[b..e]$ is sorted when \texttt{SomeSort}$(A, b, e)$ terminates for any $b, e$. Proof by strong induction.
+    
+    \textbf{Basis step:} We have two base cases:
+    \begin{itemize}
+        \item $n = 1$: the algorithm terminates immediately. There is only one element in array $A$ so $A$ is sorted by definition.
+        \item $n = 2$: this implies $e = b + 1$. We enter the first \texttt{if} statement. If $A[b] > A[e]$, then we simply swap $A[b]$ and $A[e]$ which leads to subarray $A[e..b]$ being sorted. Otherwise, if $A[b] \leq A[e]$, subarray $A[e..b]$ is already sorted.
+    \end{itemize}
+    
+    \textbf{Inductive step:} Let $n \geq 2$ be an arbitrary integer. We assume the claim holds for all integers from 1 to $n$, now we show the claim holds for $n + 1$. 
+
+    We call \texttt{SomeSort} where $n + 1$ is the length array $A$. We calculate $p= \floor*{\frac{n + 1}{3}}$. Since $n \geq 2$, then $n + 1 \geq 3$ and hence $p \geq 1$. Using $p$, we will be able to divide $A$ into three equal parts. Let us call these sections $S_1$, $S_2$, and $S_3$.
+    
+    We call \texttt{SomeSort} on the first two sections of $A$; namely, $S_1$ and $S_2$. The length of the subarray that makes up the first two sections has length $(n + 1) - p$. Since $p \geq 1$, the subarray has length of at most $n$. By our assumption, \texttt{SomeSort} on an array of length $n$ or less will terminate and result in a correctly sorted subarray. Hence, after this call to \texttt{SomeSort}, the first two sections of $A$ will be sorted. We can also deduce that all the elements in $S_2$ will be greater than or equal to any element in $S_1$.
+
+    Next, we call \texttt{SomeSort} on the last two sections of $A$; namely, $S_2$ and $S_3$. For the same reasoning as the previous call, the last two sections of $A$ will be sorted after this call to \texttt{SomeSort} terminates. This means all elements in $S_3$ will be greater than or equal to any element in $S_2$. We can further deduce that all elements in $S_3$ will be greater than or equal to any element in $S_1$ because all elements in $S_2$ were greater than or equal to any element in $S_1$. As such, we can conclude that all elements in $S_3$ are in the correct place since sections $S_2$ and $S_3$ combined are sorted. This implies all the remaining elements that need to be sorted are in the first two sections of $A$.
+
+    Finally, we call \texttt{SomeSort} on the first two sections of $A$ again; namely, $S_1$ and $S_2$. For the same reasoning as the previous calls, the first two sections of $A$ will be sorted after this call to \texttt{SomeSort} terminates. Now we can conclude that all elements in sections $S_1$, $S_2$, and $S_3$ are sorted. 
+    
+    It then follows that $A$ is sorted and that the claim holds for $n + 1$. Now the conclusion follows from the basis step, the inductive step, and the principle of strong induction.
+
+    \item Five valid states are:
+    \begin{itemize}
+        \item 1, 8, 4, 9, 7, 3, 2, 6, 5
+        \item 1, 4, 8, 7, 9, 3, 2, 6, 5
+        \item 1, 4, 7, 8, 3, 9, 2, 6, 5
+        \item 1, 3, 4, 7, 8, 2, 9, 6, 5
+        \item 1, 3, 4, 2, 7, 8, 6, 9, 5
+    \end{itemize}
+
+    \item The recurrence is given by $T(n) = 3T(2n/3) + c$ where $c$ is some constant. We now apply the master method to solve the recurrence. We have $a = 3$, $b = 3/2$, and $f(n) = c$. We have that $\log_b(a) = \log_{3/2}(3) \approx 2.71$, so $n^{\log_b(a)} = n^{\log_{3/2}(3)} \approx n^{2.71}$. We see that $f(n) \in O(n^{\log_{3/2}(3) - \epsilon})$ for $\epsilon = 1$ (although any $0 < \epsilon < \log_{3/2}(3)$ would work), so case 1 applies. We therefore conclude $T(n) \in \Theta(n^{\log_{3/2}(3)})$.
+    
+    \item \texttt{SomeSort} is very inefficient compared to insertion sort and merge sort. The worst-case running time of \texttt{SomeSort} is $\Theta(n^{\log_{3/2}(3)})$ or about $\Theta(n^{2.71})$. On the other hand, the worst-case running time of insertion sort is $\Theta(n^2)$ and the worst-case running time of merge sort is $\Theta(n\log(n))$. When $n$ is large, \texttt{SomeSort} will run incredibly slowly compared to either insertion sort or merge sort.
+\end{enumerate}
+
+\end{document}
